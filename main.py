@@ -65,20 +65,33 @@ def deleteBoat():
         return render_template('boatdelete.html', error="Looks like we couldn't find your boat", success=None )
 
 #Update a boat
-@app.route('/boatupdate', methods=["GET"])
+@app.route('/boatupdate', methods=["GET", "POST"])
 def getUpdateBoat():
-    return render_template('boatupdate.html')
+    if request.method == "POST":  # Step 1: User submits their ID to fetch data
+        boat_id = request.form.get('id')
+        boat = conn.execute(
+            text('SELECT * FROM boats WHERE id = :id'), {"id": boat_id}
+        ).fetchone()
+        
+        if boat:
+            return render_template('boatupdate.html', boat=boat, error=None, success=None)
+        else:
+            return render_template('boatupdate.html', boat=None, error="Boat not found.", success=None)
+    else:  # Initial GET request renders empty form for user to enter ID
+        return render_template('boatupdate.html', boat=None, error=None, success=None)
 
-@app.route('/boatupdate', methods=["POST"])
+
+@app.route('/boatupdate/save', methods=["POST"])
 def updateBoat():
     try:
-        conn.execute(text('UPDATE boats SET name = :name, type = :type, owner_id = :owner_id, rental_price = :rental_price, WHERE id = :id').request.form)
+        conn.execute(
+            text('UPDATE boats SET name = :name, type = :type, owner_id = :owner_id, rental_price = :rental_price WHERE id = :id'),
+            request.form
+        )
+        conn.commit()
         return render_template('boatupdate.html', error=None, success="Your boat was updated", boat=request.form)
     except:
         return render_template('boatupdate.html', error="Failed to update your boat.", success=None)
-    
-
-
 
 @app.route('/<name>')
 def hello(name):
