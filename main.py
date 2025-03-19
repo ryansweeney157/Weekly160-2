@@ -64,6 +64,21 @@ def deleteBoat():
     else:
         return render_template('boatdelete.html', error="Looks like we couldn't find your boat", success=None )
 
+#Update a boat
+@app.route('/boatupdate', methods=["GET"])
+def getUpdateBoat():
+    return render_template('boatupdate.html')
+
+@app.route('/boatupdate', methods=["POST"])
+def updateBoat():
+    try:
+        conn.execute(text('UPDATE boats SET name = :name, type = :type, owner_id = :owner_id, rental_price = :rental_price, WHERE id = :id').request.form)
+        return render_template('boatupdate.html', error=None, success="Your boat was updated", boat=request.form)
+    except:
+        return render_template('boatupdate.html', error="Failed to update your boat.", success=None)
+    
+
+
 
 @app.route('/<name>')
 def hello(name):
