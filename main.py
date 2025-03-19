@@ -77,7 +77,7 @@ def getUpdateBoat():
             return render_template('boatupdate.html', boat=boat, error=None, success=None)
         else:
             return render_template('boatupdate.html', boat=None, error="Boat not found.", success=None)
-    else:  # Initial GET request renders empty form for user to enter ID
+    else:
         return render_template('boatupdate.html', boat=None, error=None, success=None)
 
 
