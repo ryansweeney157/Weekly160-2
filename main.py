@@ -34,6 +34,7 @@ def createBoat():
     except:
         return render_template('boat_create.html', error = "failed", success = None)
     
+#Search for Boat
 @app.route('/boatsearch', methods = ["GET"])
 def getBoatSearch():
     return render_template('boatsearch.html')
@@ -46,7 +47,24 @@ def searchBoat():
         return render_template('boatsearch.html', boat=result, error=None, success="Your boat was found!")
     else:
         return render_template('boatsearch.html', boat=None, error="No boat found!", success=None)
-        
+
+#delete a boat: 
+
+@app.route('/boatdelete', methods=["GET"])
+def getDeleteBoat():
+    return render_template('boatdelete.html')
+
+@app.route('/boatdelete', methods=["POST"])
+def deleteBoat():
+    boat_id = request.form['id']
+    result = conn.execute(text("DELETE FROM boats WHERE id = :id"), {"id": boat_id})
+    conn.commit()
+    if result.rowcount > 0:
+        return render_template('boatdelete.html', error=None, success="Your boat was successfully deleted!")
+    else:
+        return render_template('boatdelete.html', error="Looks like we couldn't find your boat", success=None )
+
+
 @app.route('/<name>')
 def hello(name):
     return render_template('user.html', name = name)
