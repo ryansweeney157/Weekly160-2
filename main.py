@@ -33,24 +33,24 @@ def createBoat():
         return render_template('boat_create.html',error = None, success = "Successful")
     except:
         return render_template('boat_create.html', error = "failed", success = None)
+    
+@app.route('/boatsearch', methods = ["GET"])
+def getBoatSearch():
+    return render_template('boatsearch.html')
+
+@app.route('/boatsearch', methods = ["POST"])
+def searchBoat():
+    boat_id = request.form['id']
+    result = conn.execute(text("SELECT * FROM boats WHERE id = :id"), {"id": boat_id}).fetchone()
+    if result:
+        return render_template('boatsearch.html', boat=result, error=None, success="Your boat was found!")
+    else:
+        return render_template('boatsearch.html', boat=None, error="No boat found!", success=None)
+        
 @app.route('/<name>')
 def hello(name):
     return render_template('user.html', name = name)
 
-'''
-@app.route('/hello')
-def hello():
-    return "Hello"
-
-
-@app.route('/hello/<int:name>')
-def serveCoffee(name):
-    return f"The next number is,  {name + 1}"
-
-@app.route('/donut')
-def serveDonut():
-    return "Here is your donut."
-    '''
 
 if __name__ == '__main__':
     app.run(debug=True)
