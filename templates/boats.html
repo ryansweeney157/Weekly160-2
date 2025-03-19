@@ -1,18 +1,59 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 {% block body %}
 
-    {%for boat in boats:%}
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: 35% 35%;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin-bottom: 20vh;
+    }
 
-    <ul>
-        <li>{{boat[0]}}</li>
-        <li>{{boat[1]}}</li>
-        <li>{{boat[2]}}</li>
-        <li>{{boat[3]}}</li>
-        <li>{{boat[4]}}</li>
-    </ul>
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 16px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: left;
+ 
+    }
 
+    .card h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        color: #333;
+    }
 
+    .card ul {
+        list-style-type: none;
+        padding: 0;
+    }
 
+    .card ul li {
+        margin: 4px 0;
+        font-size: 0.9em;
+        color: #555;
+    }
+</style>
+
+<div class="grid-container">
+    {% for boat in boats %}
+    <div class="card">
+        <h3>Boat ID: {{ boat[0] }}</h3>
+        <hr>
+        <ul>
+            <li><strong>Name:</strong> {{ boat[1] }}</li>
+            <li><strong>Type:</strong> {{ boat[2] }}</li>
+            <li><strong>Owner ID:</strong> {{ boat[3] }}</li>
+            <li><strong>Rental Price:</strong> ${{ boat[4] }}</li>
+        </ul>
+    </div>
     {% endfor %}
+</div>
 
 {% endblock %}
